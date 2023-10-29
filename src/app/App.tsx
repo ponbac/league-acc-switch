@@ -1,20 +1,80 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { atomWithStorage } from "jotai/utils";
 import * as commands from "../bindings";
+import { Button } from "@/components/ui/button";
+import { useAtom } from "jotai/react";
 
-function getGreeting(name: string) {
-  return commands.hello(name);
-}
+type LeagueAccount = {
+  displayName?: string;
+  username: string;
+  password: string;
+};
+
+const accountsAtom = atomWithStorage<Array<LeagueAccount>>(
+  "storedAccounts",
+  [],
+);
 
 function App() {
-  const { data: greeting } = useQuery({
-    queryKey: ["greeting"],
-    queryFn: () => getGreeting("Pontus"),
+  const [accounts, setAccounts] = useAtom(accountsAtom);
+
+  const { mutate: startLeague } = useMutation({
+    mutationFn: (options: { username: string; password: string }) =>
+      commands.login(options.username, options.password),
   });
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <h1>Tauri + React + Vite + shadcn/ui template!</h1>
-      <p>{greeting}</p>
+    <div className="flex min-h-screen flex-col p-8">
+      <div className="flex flex-1 flex-col items-center justify-center">
+        <div className="flex flex-col space-y-4">
+          {accounts.map((account) => (
+            <div
+              key={account.username}
+              className="flex flex-row items-center justify-between space-x-4"
+            >
+              <div className="flex flex-col">
+                <div className="text-lg font-bold">
+                  {account.displayName || account.username}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  {account.username}
+                </div>
+              </div>
+              <Button
+                onClick={() => {
+                  startLeague({
+                    username: account.username,
+                    password: account.password,
+                  });
+                }}
+              >
+                Start
+              </Button>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="flex flex-row items-center justify-center">
+        <Button
+          onClick={() => {
+            const displayName = prompt("Display Name");
+            const username = prompt("Username");
+            const password = prompt("Password");
+            if (username && password) {
+              setAccounts((prev) => [
+                ...prev,
+                {
+                  displayName: displayName || username,
+                  username,
+                  password,
+                },
+              ]);
+            }
+          }}
+        >
+          Add Account
+        </Button>
+      </div>
     </div>
   );
 }

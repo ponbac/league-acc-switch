@@ -37,9 +37,9 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "Tauri Template",
-        "width": 1600,
-        "height": 900
+        "title": "LoL Account Switcher",
+        "width": 500,
+        "height": 700
       }
     ]
   }
