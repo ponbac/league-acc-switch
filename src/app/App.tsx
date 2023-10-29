@@ -3,6 +3,7 @@ import { atomWithStorage } from "jotai/utils";
 import * as commands from "../bindings";
 import { Button } from "@/components/ui/button";
 import { useAtom } from "jotai/react";
+import { Card } from "@/components/ui/card";
 
 type LeagueAccount = {
   displayName?: string;
@@ -26,11 +27,11 @@ function App() {
   return (
     <div className="flex min-h-screen flex-col p-8">
       <div className="flex flex-1 flex-col items-center justify-center">
-        <div className="flex flex-col space-y-4">
+        <Card className="flex flex-col space-y-4 px-8 py-4">
           {accounts.map((account) => (
             <div
               key={account.username}
-              className="flex flex-row items-center justify-between space-x-4"
+              className="flex flex-row items-center justify-between gap-8"
             >
               <div className="flex flex-col">
                 <div className="text-lg font-bold">
@@ -52,7 +53,7 @@ function App() {
               </Button>
             </div>
           ))}
-        </div>
+        </Card>
       </div>
       <div className="flex flex-row items-center justify-center">
         <Button
