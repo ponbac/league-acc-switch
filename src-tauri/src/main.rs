@@ -8,10 +8,17 @@ mod commands;
 
 fn main() {
     #[cfg(debug_assertions)]
-    ts::export(collect_types![commands::login], "../src/bindings.ts").unwrap();
+    ts::export(
+        collect_types![commands::login, commands::check_exec],
+        "../src/bindings.ts",
+    )
+    .unwrap();
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![commands::login])
+        .invoke_handler(tauri::generate_handler![
+            commands::login,
+            commands::check_exec
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

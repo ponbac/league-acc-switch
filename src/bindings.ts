@@ -14,4 +14,8 @@ export function login(username: string, password: string, clientExecPath: string
     return invoke()<null>("login", { username,password,clientExecPath })
 }
 
+export function checkExec(clientExecPath: string) {
+    return invoke()<boolean>("check_exec", { clientExecPath })
+}
+
 

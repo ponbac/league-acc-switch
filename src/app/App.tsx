@@ -2,11 +2,12 @@ import { useMutation } from "@tanstack/react-query";
 import { atomWithStorage } from "jotai/utils";
 import * as commands from "../bindings";
 import { Button } from "@/components/ui/button";
-import { useAtom } from "jotai/react";
+import { useAtom, useAtomValue } from "jotai/react";
 import { Card } from "@/components/ui/card";
 import { AddAccountDialog } from "@/components/add-account-dialog";
 import { useState } from "react";
 import { XOctagon } from "lucide-react";
+import { ValidExecPath } from "@/components/valid-exec-path";
 
 export type LeagueAccount = {
   displayName?: string;
@@ -19,20 +20,26 @@ const accountsAtom = atomWithStorage<Array<LeagueAccount>>(
   [],
 );
 
-const RIOT_CLIENT_EXECUTABLE =
-  "C:\\Riot Games\\Riot Client\\RiotClientServices.exe";
+export const riotClientExecPathAtom = atomWithStorage<string>(
+  "riotClientExecPath",
+  "C:\\Riot Games\\Riot Client\\RiotClientServices.exe",
+);
+
+export const isClientPathValidAtom = atomWithStorage<boolean>(
+  "isClientPathValid",
+  true,
+);
 
 function App() {
+  const clientExecPath = useAtomValue(riotClientExecPathAtom);
+  const isClientPathValid = useAtomValue(isClientPathValidAtom);
+
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [accounts, setAccounts] = useAtom(accountsAtom);
 
   const { mutate: startLeague } = useMutation({
     mutationFn: (options: { username: string; password: string }) =>
-      commands.login(
-        options.username,
-        options.password,
-        RIOT_CLIENT_EXECUTABLE,
-      ),
+      commands.login(options.username, options.password, clientExecPath),
     onError: (error) => {
       console.error(error);
     },
@@ -40,6 +47,7 @@ function App() {
 
   return (
     <div className="flex min-h-screen flex-col p-8">
+      <ValidExecPath className="self-center" />
       <div className="flex flex-1 flex-col items-center justify-center">
         <Card className="flex flex-col space-y-4 px-4 py-4">
           {accounts.length ? (
@@ -72,6 +80,7 @@ function App() {
                   </div>
                 </div>
                 <Button
+                  disabled={!isClientPathValid}
                   onClick={() => {
                     startLeague({
                       username: account.username,
