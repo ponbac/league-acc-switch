@@ -5,9 +5,9 @@ use sysinfo::{ProcessExt, SystemExt};
 
 #[tauri::command]
 #[specta::specta]
-pub fn login(username: String, password: String) -> Result<(), String> {
+pub fn login(username: String, password: String, client_exec_path: String) -> Result<(), String> {
     kill_league_processes();
-    start_league();
+    start_league(&client_exec_path)?;
     enter_credentials(username, password);
 
     Ok(())
@@ -24,18 +24,24 @@ fn kill_league_processes() {
     }
 }
 
-fn start_league() {
-    let child = Command::new("C:\\Riot Games\\Riot Client\\RiotClientServices.exe")
+fn start_league(exec_path: &str) -> Result<(), String> {
+    let child = Command::new(exec_path)
         .arg("--launch-product=league_of_legends")
         .arg("--launch-patchline=live")
         .spawn()
-        .expect("Failed to start program");
+        .map_err(|e| {
+            let error_msg = format!("Failed to start League: {}", e);
+            eprintln!("{}", error_msg);
+
+            error_msg
+        })?;
 
     forget(child);
+    Ok(())
 }
 
 fn enter_credentials(username: String, password: String) {
-    // sleep for 5 secs
+    // sleep for 10 secs
     std::thread::sleep(std::time::Duration::from_secs(10));
     let mut enigo = enigo::Enigo::new();
 

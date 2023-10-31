@@ -19,13 +19,20 @@ const accountsAtom = atomWithStorage<Array<LeagueAccount>>(
   [],
 );
 
+const RIOT_CLIENT_EXECUTABLE =
+  "C:\\Riot Games\\Riot Client\\RiotClientServices.exe";
+
 function App() {
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [accounts, setAccounts] = useAtom(accountsAtom);
 
   const { mutate: startLeague } = useMutation({
     mutationFn: (options: { username: string; password: string }) =>
-      commands.login(options.username, options.password),
+      commands.login(
+        options.username,
+        options.password,
+        RIOT_CLIENT_EXECUTABLE,
+      ),
   });
 
   return (
