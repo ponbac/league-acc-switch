@@ -33,6 +33,9 @@ function App() {
         options.password,
         RIOT_CLIENT_EXECUTABLE,
       ),
+    onError: (error) => {
+      console.error(error);
+    },
   });
 
   return (
