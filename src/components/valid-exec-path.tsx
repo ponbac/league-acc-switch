@@ -41,9 +41,21 @@ export function ValidExecPath(props: { className?: string }) {
             <BadgeCheck className="text-green-600" />
             <div className="flex flex-col">
               <div className="text-sm font-medium">Riot Client Services</div>
-              <div className="text-xs text-muted-foreground">
+              <button
+                className="text-xs text-muted-foreground hover:underline"
+                onClick={async () => {
+                  const selectedPath = await open({
+                    multiple: false,
+                    directory: false,
+                  });
+
+                  if (selectedPath && !Array.isArray(selectedPath)) {
+                    onPathSelected(selectedPath);
+                  }
+                }}
+              >
                 {clientExecPath || "Not set"}
-              </div>
+              </button>
             </div>
           </>
         ) : (
