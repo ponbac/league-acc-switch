@@ -1,11 +1,13 @@
 import * as commands from "@/bindings";
+import { open } from "@tauri-apps/api/dialog";
 import { isClientPathValidAtom, riotClientExecPathAtom } from "@/app/App";
 import { useAtom, useSetAtom } from "jotai/react";
-import { BadgeCheck, XOctagon } from "lucide-react";
+import { BadgeCheck } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { Card } from "./ui/card";
 import { cn } from "@/lib/utils";
+import React from "react";
 
 export function ValidExecPath(props: { className?: string }) {
   const [clientExecPath, setClientExecPath] = useAtom(riotClientExecPathAtom);
@@ -15,6 +17,13 @@ export function ValidExecPath(props: { className?: string }) {
     queryKey: ["isClientPathValid", clientExecPath],
     queryFn: () => commands.checkExec(clientExecPath),
   });
+
+  const onPathSelected = React.useCallback(
+    async (path: string) => {
+      setClientExecPath(path);
+    },
+    [setClientExecPath],
+  );
 
   useEffect(() => {
     if (isClientPathValid) {
@@ -26,26 +35,40 @@ export function ValidExecPath(props: { className?: string }) {
 
   return (
     <Card className={cn("px-4 py-2", props.className)}>
-      <div className="flex flex-row items-center justify-between gap-8">
-        <div className="flex flex-row items-center justify-center gap-2">
-          {isClientPathValid ? (
+      <div className="flex flex-row items-center justify-center gap-2">
+        {isClientPathValid ? (
+          <>
             <BadgeCheck className="text-green-600" />
-          ) : (
-            <XOctagon className="text-red-500" />
-          )}
-          <div className="flex flex-col">
-            <div className="text-sm font-medium">Riot Client Services</div>
-            <div className="text-xs text-muted-foreground">
-              {clientExecPath || "Not set"}
+            <div className="flex flex-col">
+              <div className="text-sm font-medium">Riot Client Services</div>
+              <div className="text-xs text-muted-foreground">
+                {clientExecPath || "Not set"}
+              </div>
             </div>
-          </div>
-        </div>
+          </>
+        ) : (
+          <>
+            <div className="text-sm text-red-500">
+              <button
+                className="hover:underline"
+                onClick={async () => {
+                  const selectedPath = await open({
+                    multiple: false,
+                    directory: false,
+                  });
+
+                  if (selectedPath && !Array.isArray(selectedPath)) {
+                    onPathSelected(selectedPath);
+                  }
+                }}
+              >
+                Riot Client not found, click here to set path to{" "}
+                <span className="font-mono">RiotClientServices.exe</span>
+              </button>
+            </div>
+          </>
+        )}
       </div>
-      {!isClientPathValid ? (
-        <div className="text-sm text-red-500">
-          Invalid League of Legends Client Path
-        </div>
-      ) : null}
     </Card>
   );
 }
