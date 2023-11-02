@@ -44,12 +44,9 @@ export function ValidExecPath(props: { className?: string }) {
               <button
                 className="text-xs text-muted-foreground hover:underline"
                 onClick={async () => {
-                  const selectedPath = await open({
-                    multiple: false,
-                    directory: false,
-                  });
+                  const selectedPath = await openRiotClient();
 
-                  if (selectedPath && !Array.isArray(selectedPath)) {
+                  if (selectedPath) {
                     onPathSelected(selectedPath);
                   }
                 }}
@@ -64,12 +61,9 @@ export function ValidExecPath(props: { className?: string }) {
               <button
                 className="hover:underline"
                 onClick={async () => {
-                  const selectedPath = await open({
-                    multiple: false,
-                    directory: false,
-                  });
+                  const selectedPath = await openRiotClient();
 
-                  if (selectedPath && !Array.isArray(selectedPath)) {
+                  if (selectedPath) {
                     onPathSelected(selectedPath);
                   }
                 }}
@@ -83,4 +77,18 @@ export function ValidExecPath(props: { className?: string }) {
       </div>
     </Card>
   );
+}
+
+async function openRiotClient() {
+  const selectedPath = await open({
+    multiple: false,
+    directory: false,
+    filters: [{ name: "RiotClientServices", extensions: ["exe"] }],
+  });
+
+  if (selectedPath && !Array.isArray(selectedPath)) {
+    return selectedPath;
+  }
+
+  return null;
 }
