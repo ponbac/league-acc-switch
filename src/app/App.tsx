@@ -71,9 +71,13 @@ function App() {
                     />
                   </button>
                   <div className="flex flex-col">
-                    <h1 className="max-w-[16rem] truncate text-lg font-bold">
+                    <a
+                      href={`https://u.gg/lol/profile/euw1/${account.displayName}/overview`}
+                      target="_blank"
+                      className="max-w-[16rem] truncate text-lg font-bold hover:underline"
+                    >
                       {account.displayName || account.username}
-                    </h1>
+                    </a>
                     <h2 className="text-sm text-muted-foreground">
                       {account.username}
                     </h2>
