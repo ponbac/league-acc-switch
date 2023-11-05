@@ -6,7 +6,7 @@ import { useAtom, useAtomValue } from "jotai/react";
 import { Card } from "@/components/ui/card";
 import { AddAccountDialog } from "@/components/add-account-dialog";
 import { useState } from "react";
-import { XOctagon } from "lucide-react";
+import { XOctagon, LogIn } from "lucide-react";
 import { ValidExecPath } from "@/components/valid-exec-path";
 
 export type LeagueAccount = {
@@ -54,7 +54,7 @@ function App() {
             accounts.map((account) => (
               <div
                 key={account.username}
-                className="flex flex-row items-center justify-between gap-8"
+                className="flex min-w-[18rem] flex-row items-center justify-between gap-8"
               >
                 <div className="flex flex-row justify-center gap-4">
                   <button
@@ -92,12 +92,12 @@ function App() {
                     });
                   }}
                 >
-                  Login
+                  <LogIn />
                 </Button>
               </div>
             ))
           ) : (
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex min-w-[18rem] flex-col items-center justify-center">
               <div className="text-lg font-bold">No Accounts</div>
               <div className="text-sm text-muted-foreground">
                 Add an account to get started
