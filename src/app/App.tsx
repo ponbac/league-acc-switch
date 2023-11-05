@@ -22,7 +22,7 @@ const accountsAtom = atomWithStorage<Array<LeagueAccount>>(
 
 export const riotClientExecPathAtom = atomWithStorage<string>(
   "riotClientExecPath",
-  "C:\\Riot Games\\Riot Client\\RiotClientServices.exeX",
+  "C:\\Riot Games\\Riot Client\\RiotClientServices.exe",
 );
 
 export const isClientPathValidAtom = atomWithStorage<boolean>(
