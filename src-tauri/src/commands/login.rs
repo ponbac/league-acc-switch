@@ -40,6 +40,7 @@ fn start_league(exec_path: &str) -> Result<(), String> {
     Ok(())
 }
 
+// TODO: https://www.reddit.com/r/rust/comments/qkpttn/are_there_any_libraries_for_getting_text_from_the/hiy8tn2/
 fn enter_credentials(username: String, password: String) {
     // sleep for 10 secs
     std::thread::sleep(std::time::Duration::from_secs(10));
