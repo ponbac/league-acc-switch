@@ -5,7 +5,11 @@ use sysinfo::{ProcessExt, SystemExt};
 
 #[tauri::command]
 #[specta::specta]
-pub fn login(username: String, password: String, client_exec_path: String) -> Result<(), String> {
+pub async fn login(
+    username: String,
+    password: String,
+    client_exec_path: String,
+) -> Result<(), String> {
     kill_league_processes();
     start_league(&client_exec_path)?;
     enter_credentials(username, password);
