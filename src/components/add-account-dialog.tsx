@@ -16,10 +16,20 @@ export function AddAccountDialog(props: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onAdd: (account: LeagueAccount) => void;
+  editAccount?: LeagueAccount;
+  customTrigger?: React.ReactNode;
 }) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [displayName, setDisplayName] = useState("");
+  const mode = props.editAccount ? "Edit" : "Add";
+
+  const [username, setUsername] = useState(
+    props.editAccount ? props.editAccount.username : "",
+  );
+  const [password, setPassword] = useState(
+    props.editAccount ? props.editAccount.password : "",
+  );
+  const [displayName, setDisplayName] = useState(
+    props.editAccount ? props.editAccount.displayName : "",
+  );
 
   const clearFields = () => {
     setUsername("");
@@ -52,11 +62,17 @@ export function AddAccountDialog(props: {
       }}
     >
       <DialogTrigger asChild>
-        <Button>Add account</Button>
+        {props.customTrigger ? (
+          props.customTrigger
+        ) : (
+          <Button>Add account</Button>
+        )}
       </DialogTrigger>
       <DialogContent className="max-w-[85%] rounded-lg">
         <DialogHeader>
-          <DialogTitle>Add League account</DialogTitle>
+          <DialogTitle>
+            {mode === "Add" ? "Add League account" : "Edit account"}
+          </DialogTitle>
           <DialogDescription>
             These credentials will be stored locally on your computer.
           </DialogDescription>
@@ -84,7 +100,7 @@ export function AddAccountDialog(props: {
             disabled={!username || !password}
             onClick={() => props.onAdd({ username, password, displayName })}
           >
-            Add
+            {mode === "Add" ? "Add" : "Save"}
           </Button>
         </DialogFooter>
       </DialogContent>

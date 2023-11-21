@@ -8,6 +8,7 @@ import { AddAccountDialog } from "@/components/add-account-dialog";
 import { useState } from "react";
 import { XOctagon, LogIn } from "lucide-react";
 import { ValidExecPath } from "@/components/valid-exec-path";
+import { EditAccount } from "@/components/edit-account";
 
 export type LeagueAccount = {
   displayName?: string;
@@ -15,7 +16,7 @@ export type LeagueAccount = {
   password: string;
 };
 
-const accountsAtom = atomWithStorage<Array<LeagueAccount>>(
+export const accountsAtom = atomWithStorage<Array<LeagueAccount>>(
   "storedAccounts",
   [],
 );
@@ -71,13 +72,16 @@ function App() {
                     />
                   </button>
                   <div className="flex flex-col">
-                    <a
-                      href={`https://u.gg/lol/profile/euw1/${account.displayName}/overview`}
-                      target="_blank"
-                      className="max-w-[16rem] truncate text-lg font-bold hover:underline"
-                    >
-                      {account.displayName || account.username}
-                    </a>
+                    <div className="flex flex-row items-center gap-2">
+                      <a
+                        href={`https://u.gg/lol/profile/euw1/${account.displayName}/overview`}
+                        target="_blank"
+                        className="max-w-[16rem] truncate text-lg font-bold hover:underline"
+                      >
+                        {account.displayName || account.username}
+                      </a>
+                      <EditAccount account={account} />
+                    </div>
                     <h2 className="text-sm text-muted-foreground">
                       {account.username}
                     </h2>
