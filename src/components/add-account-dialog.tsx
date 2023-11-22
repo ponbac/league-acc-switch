@@ -21,15 +21,9 @@ export function AddAccountDialog(props: {
 }) {
   const mode = props.editAccount ? "Edit" : "Add";
 
-  const [username, setUsername] = useState(
-    props.editAccount ? props.editAccount.username : "",
-  );
-  const [password, setPassword] = useState(
-    props.editAccount ? props.editAccount.password : "",
-  );
-  const [displayName, setDisplayName] = useState(
-    props.editAccount ? props.editAccount.displayName : "",
-  );
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
 
   const clearFields = () => {
     setUsername("");
@@ -50,6 +44,14 @@ export function AddAccountDialog(props: {
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [username, password, displayName, props]);
+
+  useEffect(() => {
+    if (props.editAccount && props.open) {
+      setUsername(props.editAccount.username);
+      setPassword(props.editAccount.password);
+      setDisplayName(props.editAccount.displayName || "");
+    }
+  }, [props.editAccount, props.open]);
 
   return (
     <Dialog
