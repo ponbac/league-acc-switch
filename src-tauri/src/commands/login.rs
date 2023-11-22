@@ -1,7 +1,7 @@
 use std::{mem::forget, process::Command};
 
 use enigo::KeyboardControllable;
-use sysinfo::{ProcessExt, SystemExt};
+use sysinfo::{ProcessExt, ProcessRefreshKind, RefreshKind, SystemExt};
 
 #[tauri::command]
 #[specta::specta]
@@ -18,7 +18,10 @@ pub async fn login(
 }
 
 fn kill_league_processes() {
-    let sys = sysinfo::System::new_all();
+    let sys = sysinfo::System::new_with_specifics(
+        RefreshKind::new().with_processes(ProcessRefreshKind::new()),
+    );
+
     for (pid, process) in sys.processes() {
         let lowercase_name = process.name().to_lowercase();
         if lowercase_name.contains("riot") || lowercase_name.contains("league") {
@@ -44,16 +47,32 @@ fn start_league(exec_path: &str) -> Result<(), String> {
     Ok(())
 }
 
-// TODO: https://www.reddit.com/r/rust/comments/qkpttn/are_there_any_libraries_for_getting_text_from_the/hiy8tn2/
 fn enter_credentials(username: String, password: String) {
-    // sleep for 10 secs
-    std::thread::sleep(std::time::Duration::from_secs(10));
-    let mut enigo = enigo::Enigo::new();
+    wait_for_process_to_appear("RiotClientUx.exe");
+    std::thread::sleep(std::time::Duration::from_millis(5000));
 
+    let mut enigo = enigo::Enigo::new();
     enigo.key_sequence(&username.to_lowercase());
     enigo.key_sequence_parse("{TAB}");
     enigo.key_sequence(&password);
     enigo.key_sequence_parse("{RETURN}");
+}
+
+fn wait_for_process_to_appear(process_name: &str) {
+    let mut sys = sysinfo::System::new_with_specifics(
+        RefreshKind::new().with_processes(ProcessRefreshKind::new()),
+    );
+
+    while !sys
+        .processes()
+        .iter()
+        .any(|(_, process)| process.name().to_lowercase() == process_name.to_lowercase())
+    {
+        sys.refresh_processes();
+        std::thread::sleep(std::time::Duration::from_millis(50));
+    }
+
+    println!("Process {} appeared", process_name);
 }
 
 // #[cfg(test)]
