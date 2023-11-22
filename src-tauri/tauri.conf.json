@@ -7,8 +7,8 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "lol-account-switcher",
-    "version": "0.0.0"
+    "productName": "LoL Account Swap",
+    "version": "0.0.1"
   },
   "tauri": {
     "allowlist": {
@@ -29,7 +29,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "xyz.ponbac.lol-account-switcher",
+      "identifier": "xyz.ponbac.lol-account-swap",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -45,10 +45,20 @@
       {
         "fullscreen": false,
         "resizable": false,
-        "title": "LoL Account Switcher",
+        "title": "LoL Account Swap",
         "width": 500,
         "height": 800
       }
-    ]
+    ],
+    "updater": {
+      "active": true,
+      "dialog": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDZFRkFBNDRGQ0NCMjkzNQpSV1ExS2N2OFJLcnZCam1DaUJSZmpKNno0eks4UmtacFBmMlUyUmd2ZFZyblczTGVpTUpZelNHbAo=",
+      "windows": {
+        "installMode": "passive",
+        "installerArgs": []
+      },
+      "endpoints": []
+    }
   }
 }
