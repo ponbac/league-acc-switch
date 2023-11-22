@@ -1,6 +1,8 @@
-# Tauri + React + Typescript
+# LoL Account Swap
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+## About
+
+This is a simple tool to swap between multiple League of Legends accounts.
 
 ## Recommended IDE Setup
 

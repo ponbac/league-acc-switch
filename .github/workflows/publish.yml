@@ -34,8 +34,8 @@ jobs:
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
         with:
           tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
-          releaseName: "App v__VERSION__"
-          releaseBody: "See the assets to download this version and install."
+          releaseName: "LAS v__VERSION__"
+          releaseBody: "See the assets to download this version and install. The `*-setup.exe` file is recommended but the `.msi` also works."
           releaseDraft: true
           prerelease: false
           includeUpdaterJson: true
