@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "LoL Account Swap",
-    "version": "0.0.2"
+    "version": "0.0.3"
   },
   "tauri": {
     "allowlist": {
@@ -59,7 +59,7 @@
         "installerArgs": []
       },
       "endpoints": [
-        "https://gist.githubusercontent.com/ponbac/f862f85b939a5e665990bf940a70a182/raw/ee2c70511353c781f3fa319f2513770a3388aa59/latest.json"
+        "https://github.com/ponbac/league-acc-switch/releases/latest/download/latest.json"
       ]
     }
   }
