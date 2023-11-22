@@ -84,17 +84,20 @@ export function AddAccountDialog(props: {
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            spellCheck={false}
           />
           <Input
             placeholder="Password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            spellCheck={false}
           />
           <Input
             placeholder="Display name (optional)"
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
+            spellCheck={false}
           />
         </div>
         <DialogFooter>
