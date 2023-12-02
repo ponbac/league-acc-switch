@@ -75,22 +75,32 @@ fn wait_for_process_to_appear(process_name: &str) {
     println!("Process {} appeared", process_name);
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
+#[cfg(test)]
+mod tests {
+    use std::{thread::sleep, time::Duration};
 
-//     #[test]
-//     fn test_kill_processes() {
-//         let kill_result = kill_league_processes();
+    use enigo::{Enigo, MouseControllable};
+    use screenshots::Screen;
 
-//         assert!(kill_result.is_ok());
-//     }
+    use super::*;
 
-//     #[test]
-//     fn test_start_league() {
-//         let start_result = start_league();
-//         enter_credentials().unwrap();
+    #[test]
+    fn test_get_pixel() {
+        let screen = Screen::from_point(100, 100).unwrap();
+        println!("capturer {screen:?}");
+        let image_1 = screen.capture_area(100, 100, 100, 100).unwrap();
+        image_1.save("test.png").unwrap();
+        let image_2 = screen.capture_area(100, 200, 100, 100).unwrap();
+        image_2.save("test2.png").unwrap();
+        let big_image = screen.capture_area(100, 100, 200, 200).unwrap();
 
-//         assert!(start_result.is_ok());
-//     }
-// }
+        // assert that the two images are different
+        assert_ne!(image_1, image_2);
+
+        // check that the big image contains the two images
+        // assert!(big_image.contains(&image_1.into_vec()));
+        // assert!(big_image.contains(&image_2));
+
+        // https://crates.io/crates/find-subimage
+    }
+}
