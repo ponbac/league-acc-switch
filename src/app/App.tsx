@@ -12,6 +12,7 @@ import { EditAccount } from "@/components/edit-account";
 
 export type LeagueAccount = {
   displayName?: string;
+  tag?: string;
   username: string;
   password: string;
 };
@@ -73,13 +74,22 @@ function App() {
                   </button>
                   <div className="flex flex-col">
                     <div className="flex flex-row items-center gap-2">
-                      <a
-                        href={`https://u.gg/lol/profile/euw1/${account.displayName}/overview`}
-                        target="_blank"
-                        className="max-w-[16rem] truncate text-lg font-bold hover:underline"
-                      >
-                        {account.displayName || account.username}
-                      </a>
+                      <div className="flex flex-row items-center gap-1">
+                        <a
+                          href={`https://www.op.gg/summoners/euw/${
+                            account.displayName
+                          }${account.tag ? `-${account.tag}` : ""}}}`}
+                          target="_blank"
+                          className="flex max-w-[16rem] flex-row items-center gap-1 truncate text-lg font-bold hover:underline"
+                        >
+                          {account.displayName || account.username}{" "}
+                        </a>
+                        {account.tag ? (
+                          <p className="text-sm text-muted-foreground">
+                            #{account.tag}
+                          </p>
+                        ) : null}
+                      </div>
                       <EditAccount account={account} />
                     </div>
                     <h2 className="text-sm text-muted-foreground">

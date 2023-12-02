@@ -24,18 +24,20 @@ export function AddAccountDialog(props: {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
+  const [tag, setTag] = useState("EUW");
 
   const clearFields = () => {
     setUsername("");
     setPassword("");
     setDisplayName("");
+    setTag("EUW");
   };
 
   // submit on enter (todo: should use proper form)
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Enter" && username && password) {
-        props.onAdd({ username, password, displayName });
+        props.onAdd({ username, password, displayName, tag });
       }
     };
     document.addEventListener("keydown", onKeyDown);
@@ -43,13 +45,14 @@ export function AddAccountDialog(props: {
     return () => {
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [username, password, displayName, props]);
+  }, [username, password, displayName, tag, props]);
 
   useEffect(() => {
     if (props.editAccount && props.open) {
       setUsername(props.editAccount.username);
       setPassword(props.editAccount.password);
       setDisplayName(props.editAccount.displayName || "");
+      setTag(props.editAccount.tag ?? "EUW");
     }
   }, [props.editAccount, props.open]);
 
@@ -99,11 +102,19 @@ export function AddAccountDialog(props: {
             onChange={(e) => setDisplayName(e.target.value)}
             spellCheck={false}
           />
+          <Input
+            placeholder="Tag (optional)"
+            value={tag}
+            onChange={(e) => setTag(e.target.value)}
+            spellCheck={false}
+          />
         </div>
         <DialogFooter>
           <Button
             disabled={!username || !password}
-            onClick={() => props.onAdd({ username, password, displayName })}
+            onClick={() =>
+              props.onAdd({ username, password, displayName, tag })
+            }
           >
             {mode === "Add" ? "Add" : "Save"}
           </Button>
