@@ -78,7 +78,7 @@ function App() {
                         <a
                           href={`https://www.op.gg/summoners/euw/${
                             account.displayName
-                          }${account.tag ? `-${account.tag}` : ""}}}`}
+                          }${account.tag ? `-${account.tag}` : ""}`}
                           target="_blank"
                           className="flex max-w-[16rem] flex-row items-center gap-1 truncate text-lg font-bold hover:underline"
                         >
