@@ -80,6 +80,7 @@ mod tests {
     use std::{thread::sleep, time::Duration};
 
     use enigo::{Enigo, MouseControllable};
+    use find_subimage::{Image, SubImageFinderState};
     use screenshots::Screen;
 
     use super::*;
@@ -90,16 +91,30 @@ mod tests {
         println!("capturer {screen:?}");
         let image_1 = screen.capture_area(100, 100, 100, 100).unwrap();
         image_1.save("test.png").unwrap();
+        let raw_image_1 = image_1.as_raw();
         let image_2 = screen.capture_area(100, 200, 100, 100).unwrap();
         image_2.save("test2.png").unwrap();
+        let raw_image_2 = image_2.as_raw();
         let big_image = screen.capture_area(100, 100, 200, 200).unwrap();
+        big_image.save("test3.png").unwrap();
+        let raw_big_image = big_image.as_raw();
 
-        // assert that the two images are different
-        assert_ne!(image_1, image_2);
+        // time it
+        let start = std::time::Instant::now();
+        let mut finder = SubImageFinderState::new();
 
-        // check that the big image contains the two images
-        // assert!(big_image.contains(&image_1.into_vec()));
-        // assert!(big_image.contains(&image_2));
+        let big_size: usize = 200;
+        let small_size: usize = 100;
+        let positions: &[(usize, usize, f32)] = finder.find_subimage_positions(
+            (raw_big_image, big_size, big_size),
+            (raw_image_1, small_size, small_size),
+            4,
+        );
+        let max: Option<&(usize, usize, f32)> = positions
+            .iter()
+            .min_by(|(_, _, dist), (_, _, dist2)| dist.partial_cmp(dist2).unwrap());
+        println!("The subimage was found at position {:?}", &max);
+        println!("Time taken: {} ms", start.elapsed().as_millis());
 
         // https://crates.io/crates/find-subimage
     }
