@@ -1,5 +1,6 @@
 use std::{mem::forget, process::Command};
 
+use clipboard_win::{formats, set_clipboard};
 use enigo::KeyboardControllable;
 use sysinfo::{ProcessExt, ProcessRefreshKind, RefreshKind, SystemExt};
 
@@ -52,10 +53,19 @@ fn enter_credentials(username: String, password: String) {
     std::thread::sleep(std::time::Duration::from_millis(5000));
 
     let mut enigo = enigo::Enigo::new();
-    enigo.key_sequence(&username);
+    set_clipboard(formats::Unicode, &username).expect("To set clipboard");
+    std::thread::sleep(std::time::Duration::from_millis(100));
+    enigo.key_down(enigo::Key::Control);
+    enigo.key_click(enigo::Key::Layout('v'));
+    enigo.key_up(enigo::Key::Control);
     enigo.key_sequence_parse("{TAB}");
-    enigo.key_sequence(&password);
+    set_clipboard(formats::Unicode, &password).expect("To set clipboard");
+    std::thread::sleep(std::time::Duration::from_millis(100));
+    enigo.key_down(enigo::Key::Control);
+    enigo.key_click(enigo::Key::Layout('v'));
+    enigo.key_up(enigo::Key::Control);
     enigo.key_sequence_parse("{RETURN}");
+    set_clipboard(formats::Unicode, "").expect("To set clipboard");
 }
 
 fn wait_for_process_to_appear(process_name: &str) {
