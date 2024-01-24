@@ -76,9 +76,9 @@ function App() {
                     <div className="flex flex-row items-center gap-2">
                       <div className="flex flex-row items-center gap-1">
                         <a
-                          href={`https://www.op.gg/summoners/euw/${
+                          href={`https://u.gg/lol/profile/euw1/${
                             account.displayName
-                          }${account.tag ? `-${account.tag}` : ""}`}
+                          }${account.tag ? `-${account.tag}` : ""}/overview`}
                           target="_blank"
                           className="flex max-w-[16rem] flex-row items-center gap-1 truncate text-lg font-bold hover:underline"
                         >

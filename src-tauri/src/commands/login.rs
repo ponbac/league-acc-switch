@@ -52,7 +52,7 @@ fn enter_credentials(username: String, password: String) {
     std::thread::sleep(std::time::Duration::from_millis(5000));
 
     let mut enigo = enigo::Enigo::new();
-    enigo.key_sequence(&username.to_lowercase());
+    enigo.key_sequence(&username);
     enigo.key_sequence_parse("{TAB}");
     enigo.key_sequence(&password);
     enigo.key_sequence_parse("{RETURN}");
