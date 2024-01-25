@@ -1,4 +1,4 @@
-use std::{mem::forget, process::Command};
+use std::{mem::forget, process::Command, thread::sleep};
 
 use clipboard_win::{formats, set_clipboard};
 use enigo::KeyboardControllable;
@@ -53,17 +53,9 @@ fn enter_credentials(username: String, password: String) {
     std::thread::sleep(std::time::Duration::from_millis(5000));
 
     let mut enigo = enigo::Enigo::new();
-    set_clipboard(formats::Unicode, &username).expect("To set clipboard");
-    std::thread::sleep(std::time::Duration::from_millis(100));
-    enigo.key_down(enigo::Key::Control);
-    enigo.key_click(enigo::Key::Layout('v'));
-    enigo.key_up(enigo::Key::Control);
+    set_clipboard_and_paste(&username, &mut enigo);
     enigo.key_sequence_parse("{TAB}");
-    set_clipboard(formats::Unicode, &password).expect("To set clipboard");
-    std::thread::sleep(std::time::Duration::from_millis(100));
-    enigo.key_down(enigo::Key::Control);
-    enigo.key_click(enigo::Key::Layout('v'));
-    enigo.key_up(enigo::Key::Control);
+    set_clipboard_and_paste(&password, &mut enigo);
     enigo.key_sequence_parse("{RETURN}");
     set_clipboard(formats::Unicode, "").expect("To set clipboard");
 }
@@ -83,6 +75,15 @@ fn wait_for_process_to_appear(process_name: &str) {
     }
 
     println!("Process {} appeared", process_name);
+}
+
+fn set_clipboard_and_paste(text: &str, enigo: &mut enigo::Enigo) {
+    set_clipboard(formats::Unicode, text).expect("To set clipboard");
+    sleep(std::time::Duration::from_millis(150));
+    enigo.key_down(enigo::Key::Control);
+    enigo.key_click(enigo::Key::Layout('v'));
+    enigo.key_up(enigo::Key::Control);
+    sleep(std::time::Duration::from_millis(100));
 }
 
 // #[cfg(test)]
