@@ -2,7 +2,7 @@ use std::{mem::forget, process::Command, thread::sleep};
 
 use clipboard_win::{formats, set_clipboard};
 use enigo::KeyboardControllable;
-use sysinfo::{ProcessExt, ProcessRefreshKind, RefreshKind, SystemExt};
+use sysinfo::{ProcessRefreshKind, RefreshKind};
 
 #[tauri::command]
 #[specta::specta]

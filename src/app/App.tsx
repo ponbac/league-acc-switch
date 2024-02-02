@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { atomWithStorage } from "jotai/utils";
 import * as commands from "../bindings";
 import { Button } from "@/components/ui/button";
+import { Reorder } from "framer-motion";
 import { useAtom, useAtomValue } from "jotai/react";
 import { Card } from "@/components/ui/card";
 import { AddAccountDialog } from "@/components/add-account-dialog";
@@ -51,73 +52,83 @@ function App() {
     <div className="flex min-h-screen flex-col p-8">
       <ValidExecPath className="self-center" />
       <div className="flex flex-1 flex-col items-center justify-center">
-        <Card className="flex flex-col space-y-4 px-4 py-4">
-          {accounts.length ? (
-            accounts.map((account) => (
-              <div
-                key={account.username}
-                className="flex min-w-[18rem] flex-row items-center justify-between gap-8"
-              >
-                <div className="flex flex-row justify-center gap-4">
-                  <button
-                    className="group"
-                    onClick={() => {
-                      setAccounts((prev) =>
-                        prev.filter((a) => a.username !== account.username),
-                      );
-                    }}
+        <Card>
+          <Reorder.Group
+            axis="y"
+            values={accounts}
+            onReorder={setAccounts}
+            className="flex flex-col space-y-4 px-4 py-4"
+          >
+            {accounts.length ?
+              accounts.map((account) => (
+                <Reorder.Item key={account.username} value={account}>
+                  <div
+                    key={account.username}
+                    className="flex min-w-[18rem] flex-row items-center justify-between gap-8"
                   >
-                    <XOctagon
-                      size={24}
-                      className="text-muted-foreground transition-colors duration-150 group-hover:text-red-500"
-                    />
-                  </button>
-                  <div className="flex flex-col">
-                    <div className="flex flex-row items-center gap-2">
-                      <div className="flex flex-row items-center gap-1">
-                        <a
-                          href={`https://u.gg/lol/profile/euw1/${
-                            account.displayName
-                          }${account.tag ? `-${account.tag}` : ""}/overview`}
-                          target="_blank"
-                          className="flex max-w-[16rem] flex-row items-center gap-1 truncate text-lg font-bold hover:underline"
-                        >
-                          {account.displayName || account.username}{" "}
-                        </a>
-                        {account.tag ? (
-                          <p className="text-sm text-muted-foreground">
-                            #{account.tag}
-                          </p>
-                        ) : null}
+                    <div className="flex flex-row justify-center gap-4">
+                      <button
+                        className="group"
+                        onClick={() => {
+                          setAccounts((prev) =>
+                            prev.filter((a) => a.username !== account.username),
+                          );
+                        }}
+                      >
+                        <XOctagon
+                          size={24}
+                          className="text-muted-foreground transition-colors duration-150 group-hover:text-red-500"
+                        />
+                      </button>
+                      <div className="flex flex-col">
+                        <div className="flex flex-row items-center gap-2">
+                          <div className="flex flex-row items-center gap-1">
+                            <a
+                              href={`https://u.gg/lol/profile/euw1/${
+                                account.displayName
+                              }${
+                                account.tag ? `-${account.tag}` : ""
+                              }/overview`}
+                              target="_blank"
+                              className="flex max-w-[16rem] flex-row items-center gap-1 truncate text-lg font-bold hover:underline"
+                            >
+                              {account.displayName || account.username}{" "}
+                            </a>
+                            {account.tag ?
+                              <p className="text-sm text-muted-foreground">
+                                #{account.tag}
+                              </p>
+                            : null}
+                          </div>
+                          <EditAccount account={account} />
+                        </div>
+                        <h2 className="text-sm text-muted-foreground">
+                          {account.username}
+                        </h2>
                       </div>
-                      <EditAccount account={account} />
                     </div>
-                    <h2 className="text-sm text-muted-foreground">
-                      {account.username}
-                    </h2>
+                    <Button
+                      disabled={!isClientPathValid}
+                      onClick={() => {
+                        startLeague({
+                          username: account.username,
+                          password: account.password,
+                        });
+                      }}
+                    >
+                      <LogIn />
+                    </Button>
                   </div>
+                </Reorder.Item>
+              ))
+            : <div className="flex min-w-[18rem] flex-col items-center justify-center">
+                <div className="text-lg font-bold">No Accounts</div>
+                <div className="text-sm text-muted-foreground">
+                  Add an account to get started
                 </div>
-                <Button
-                  disabled={!isClientPathValid}
-                  onClick={() => {
-                    startLeague({
-                      username: account.username,
-                      password: account.password,
-                    });
-                  }}
-                >
-                  <LogIn />
-                </Button>
               </div>
-            ))
-          ) : (
-            <div className="flex min-w-[18rem] flex-col items-center justify-center">
-              <div className="text-lg font-bold">No Accounts</div>
-              <div className="text-sm text-muted-foreground">
-                Add an account to get started
-              </div>
-            </div>
-          )}
+            }
+          </Reorder.Group>
         </Card>
       </div>
       <div className="flex flex-row items-center justify-center">
