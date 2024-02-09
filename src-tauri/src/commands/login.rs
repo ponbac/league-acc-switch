@@ -50,7 +50,7 @@ fn start_league(exec_path: &str) -> Result<(), String> {
 
 fn enter_credentials(username: String, password: String) {
     wait_for_process_to_appear("RiotClientUx.exe");
-    std::thread::sleep(std::time::Duration::from_millis(5000));
+    std::thread::sleep(std::time::Duration::from_millis(6000));
 
     let mut enigo = enigo::Enigo::new();
     set_clipboard_and_paste(&username, &mut enigo);
@@ -79,11 +79,11 @@ fn wait_for_process_to_appear(process_name: &str) {
 
 fn set_clipboard_and_paste(text: &str, enigo: &mut enigo::Enigo) {
     set_clipboard(formats::Unicode, text).expect("To set clipboard");
-    sleep(std::time::Duration::from_millis(150));
+    sleep(std::time::Duration::from_millis(200));
     enigo.key_down(enigo::Key::Control);
     enigo.key_click(enigo::Key::Layout('v'));
     enigo.key_up(enigo::Key::Control);
-    sleep(std::time::Duration::from_millis(100));
+    sleep(std::time::Duration::from_millis(200));
 }
 
 // #[cfg(test)]
