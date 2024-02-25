@@ -49,7 +49,7 @@ fn start_league(exec_path: &str) -> Result<(), String> {
 }
 
 fn enter_credentials(username: String, password: String) {
-    wait_for_process_to_appear("RiotClientUx.exe");
+    wait_for_process_to_appear("Riot Client.exe");
     std::thread::sleep(std::time::Duration::from_millis(6000));
 
     let mut enigo = enigo::Enigo::new();
