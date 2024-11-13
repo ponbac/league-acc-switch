@@ -24,9 +24,9 @@ fn kill_league_processes() {
     );
 
     for (pid, process) in sys.processes() {
-        let lowercase_name = process.name().to_lowercase();
+        let lowercase_name = process.name().to_string_lossy().to_lowercase();
         if lowercase_name.contains("riot") || lowercase_name.contains("league") {
-            println!("Killing [{}]: {}", pid, process.name());
+            println!("Killing [{}]: {}", pid, process.name().to_string_lossy());
             process.kill();
         }
     }
@@ -65,12 +65,10 @@ fn wait_for_process_to_appear(process_name: &str) {
         RefreshKind::new().with_processes(ProcessRefreshKind::new()),
     );
 
-    while !sys
-        .processes()
-        .iter()
-        .any(|(_, process)| process.name().to_lowercase() == process_name.to_lowercase())
-    {
-        sys.refresh_processes();
+    while !sys.processes().iter().any(|(_, process)| {
+        process.name().to_string_lossy().to_lowercase() == process_name.to_lowercase()
+    }) {
+        sys.refresh_processes(sysinfo::ProcessesToUpdate::All, true);
         std::thread::sleep(std::time::Duration::from_millis(50));
     }
 

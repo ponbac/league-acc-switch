@@ -2,65 +2,51 @@
   "build": {
     "beforeDevCommand": "pnpm dev",
     "beforeBuildCommand": "pnpm build",
-    "devPath": "http://localhost:1420",
-    "distDir": "../dist",
-    "withGlobalTauri": false
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:1420"
   },
-  "package": {
-    "productName": "LoL Account Swap",
-    "version": "0.1.6"
-  },
-  "tauri": {
-    "allowlist": {
-      "all": false,
-      "shell": {
-        "all": false,
-        "open": true
-      },
-      "dialog": {
-        "all": false,
-        "ask": false,
-        "confirm": false,
-        "message": false,
-        "open": true,
-        "save": false
-      }
-    },
-    "bundle": {
-      "active": true,
-      "targets": "all",
-      "identifier": "xyz.ponbac.lol-account-swap",
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ]
-    },
-    "security": {
-      "csp": null
-    },
-    "windows": [
-      {
-        "fullscreen": false,
-        "resizable": false,
-        "title": "LoL Account Swap",
-        "width": 500,
-        "height": 800
-      }
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
     ],
+    "createUpdaterArtifacts": "v1Compatible"
+  },
+  "productName": "LoL Account Swap",
+  "mainBinaryName": "LoL Account Swap",
+  "version": "0.2.0",
+  "identifier": "xyz.ponbac.lol-account-swap",
+  "plugins": {
     "updater": {
-      "active": true,
-      "dialog": true,
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDZFRkFBNDRGQ0NCMjkzNQpSV1ExS2N2OFJLcnZCam1DaUJSZmpKNno0eks4UmtacFBmMlUyUmd2ZFZyblczTGVpTUpZelNHbAo=",
       "windows": {
         "installMode": "passive",
         "installerArgs": []
       },
       "endpoints": [
         "https://github.com/ponbac/league-acc-switch/releases/latest/download/latest.json"
-      ]
+      ],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDZFRkFBNDRGQ0NCMjkzNQpSV1ExS2N2OFJLcnZCam1DaUJSZmpKNno0eks4UmtacFBmMlUyUmd2ZFZyblczTGVpTUpZelNHbAo="
+    }
+  },
+  "app": {
+    "withGlobalTauri": false,
+    "windows": [
+      {
+        "fullscreen": false,
+        "resizable": false,
+        "title": "LoL Account Swap",
+        "width": 500,
+        "height": 800,
+        "useHttpsScheme": true
+      }
+    ],
+    "security": {
+      "csp": null
     }
   }
 }

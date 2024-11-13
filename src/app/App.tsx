@@ -1,6 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
 import { atomWithStorage } from "jotai/utils";
-import * as commands from "../bindings";
 import { Button } from "@/components/ui/button";
 import { Reorder } from "framer-motion";
 import { useAtom, useAtomValue } from "jotai/react";
@@ -10,6 +9,8 @@ import { useState } from "react";
 import { XOctagon, LogIn } from "lucide-react";
 import { ValidExecPath } from "@/components/valid-exec-path";
 import { EditAccount } from "@/components/edit-account";
+import { commands } from "@/bindings";
+import { open } from "@tauri-apps/plugin-shell";
 
 export type LeagueAccount = {
   displayName?: string;
@@ -83,17 +84,18 @@ function App() {
                       <div className="flex flex-col">
                         <div className="flex flex-row items-center gap-2">
                           <div className="flex flex-row items-center gap-1">
-                            <a
-                              href={`https://u.gg/lol/profile/euw1/${
-                                account.displayName
-                              }${
-                                account.tag ? `-${account.tag}` : ""
-                              }/overview`}
-                              target="_blank"
+                            <button
+                              onClick={() => {
+                                open(
+                                  `https://dpm.lol/${account.displayName}${
+                                    account.tag ? `-${account.tag}` : "-EUW"
+                                  }`,
+                                );
+                              }}
                               className="flex max-w-[16rem] flex-row items-center gap-1 truncate text-lg font-bold hover:underline"
                             >
                               {account.displayName || account.username}{" "}
-                            </a>
+                            </button>
                             {account.tag ?
                               <p className="text-sm text-muted-foreground">
                                 #{account.tag}

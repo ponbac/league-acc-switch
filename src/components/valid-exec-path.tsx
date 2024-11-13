@@ -1,5 +1,4 @@
-import * as commands from "@/bindings";
-import { open } from "@tauri-apps/api/dialog";
+import { open } from "@tauri-apps/plugin-dialog";
 import { isClientPathValidAtom, riotClientExecPathAtom } from "@/app/App";
 import { useAtom, useSetAtom } from "jotai/react";
 import { BadgeCheck } from "lucide-react";
@@ -8,6 +7,7 @@ import { useEffect } from "react";
 import { Card } from "./ui/card";
 import { cn } from "@/lib/utils";
 import React from "react";
+import { commands } from "@/bindings";
 
 export function ValidExecPath(props: { className?: string }) {
   const [clientExecPath, setClientExecPath] = useAtom(riotClientExecPathAtom);
